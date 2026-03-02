@@ -1,0 +1,59 @@
+Name		U99KCTL1;
+Partno		KF007017;
+Date		21/04/01;
+Revision	02;
+Designer	efialtes_htn;
+Company		E. Design;
+Assembly	System 18 TMS99105 decorder 1;
+Location	U09;
+Device		g16v8;
+
+/* *************************************************************** */
+/* System 1Q IO decorder Glue logic				   */
+/*  								   */
+/* *************************************************************** */
+/* target device	GAL16V8-10 or faster			   */
+/* *************************************************************** */
+
+/** inputs	**/
+Pin 1	=	CLK;
+Pin 2	=	!mem;
+Pin 3	=	rwi;
+Pin 4	=	!we;
+Pin 5	=	bst1;
+Pin 6	=	bst2;
+Pin 7	= 	bst3;
+Pin 8	=	a06;
+Pin 9	=	!rdi;  
+Pin 11   =	a15;
+Pin 13   =	alsel;
+
+/** outputs	**/
+Pin 18	=	!meo;	/* external mreq signal	*/
+Pin 17  =	!rdo;	/* external read signal	*/
+Pin 16	=	!wro;	/* external write signal	*/
+Pin 19	=	ioclk; 
+Pin 15	=	busak;
+Pin 14	=	!serrq; 
+Pin 12	=	!parrq; 
+
+/* logic equations	*/
+
+serrq	=	!a15 & alsel & !a06 & !mem;
+parrq	=	!a15 & alsel &  a06 & !mem;
+
+busak	=	!mem & bst1 & bst2 & bst3; 
+
+rdo	=	rdi # (rwi & CLK & mem) # (rwi & CLK & a15 & !bst1 & bst2 & bst3);
+wro	=	we;
+meo	=	mem;
+
+ioclk	=	!mem & !a15 & we;
+
+rdo.oe	=	!busak;
+wro.oe	=	!busak;
+meo.oe	=	!busak;
+busak.oe =	'b'1;
+ioclk.oe =	'b'1;
+serrq.oe =	'b'1;
+parrq.oe =	'b'1;

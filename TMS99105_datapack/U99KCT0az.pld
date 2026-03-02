@@ -1,0 +1,69 @@
+Name		U99KCTL0;
+Partno		KF007016;
+Date		21/04/01;
+Revision	0a;
+Designer	efialtes_htn;
+Company		E. Design;
+Assembly	System 18 TMS99105 decorder 0;
+Location	U08;
+Device		g22v10;
+
+/* *************************************************************** */
+/* System 1Q IO decorder Glue logic				   */
+/*  								   */
+/* *************************************************************** */
+/* target device	GAL22v10-25				   */
+/* *************************************************************** */
+
+/** inputs	**/
+Pin 1	=	CLK;
+Pin 2	=	ale;
+Pin 3	=	!mem;
+Pin 4	=	!we;
+Pin 5	=	bst1;
+Pin 6	=	bst2;
+Pin 7	= 	bst3;
+Pin 8	=	!rdi;
+Pin 9  =	!wait;
+Pin 10   =	busak;
+Pin 11   =	a15;
+Pin 13  =	!oe;
+Pin 14  =	!romw;
+Pin 23	=	ck;
+
+/** outputs	**/
+Pin 15	=	!inta; 
+Pin 16  =	!ie;
+Pin 17	=	!bg;
+Pin 18	=	sio;
+Pin 19	=	sio2; 
+Pin 20	=	cy1; 
+Pin 21	=	clk2;
+Pin 22	=	rdyo;
+
+/* logic equations	*/
+cy1	=	ale # (cy1 & !CLK);
+inta	=	!mem & bst1 & !bst2 & bst3; 
+ie	=	a15 & !mem & !bst1 & bst2 & bst3 & rdi;
+sio.d	=	(cy1 & !a15 & !mem & !bst1 & bst2 & bst3);
+sio2.d	=	sio & !mem & rdi;
+rdyo	=	!((cy1 & mem & !a15 & romw) # 
+		  (sio & !a15 & !mem & !bst1 & bst2 & bst3) #
+		  (wait));
+bg	=	(!mem & a15 & !bst1 &  bst2 &  bst3 & !ale & we) #
+		(!mem & a15 & !bst1 & bst2 & bst3 & !ale & rdi) #
+		(mem & rdi) # (mem & we);
+clk2.d	=	!clk2;
+inta.oe	=	!busak;
+ie.oe	=	!busak;
+rdyo.oe	=	'b'1;
+bg.oe	=	'b'1;
+cy1.oe	=	'b'1;
+clk2.ar	= 'b'0;
+clk2.sp	= 'b'0;
+sio.ar		= 'b'0;
+sio2.ar	= 'b'0;
+sio.sp		= 'b'0;
+sio2.sp	= 'b'0;
+
+
