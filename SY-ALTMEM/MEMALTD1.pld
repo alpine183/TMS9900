@@ -1,0 +1,48 @@
+Name		MEMALTDEC;
+Partno		KF019002;
+Date		2020/03/27;
+Revision	03;
+Designer	ALP;
+Company		ALP. Design;
+Assembly	MEMALTD1;
+Location	U05;
+Device		G16V8A;
+
+/* *************************************************************** */
+/* System 18 Alternate Memory decoder				   */
+/*  								   */
+/* *************************************************************** */
+/* target device	PAL14L4/GAL 16V8-25 			   */
+/* *************************************************************** */
+/* *************************************************************** */
+
+/** inputs	**/
+Pin 1	=	A14;
+Pin 2	= 	A15;
+Pin 3	=	A16;
+Pin 4	=	A17;	
+Pin 5	=	A18;
+Pin 6	=	!HE;
+Pin 7	=	A00;
+Pin 8	=	!BHE;
+Pin 9	=	!ME;
+Pin 11	=	!RD;
+Pin 12	=	!MEMDSBL;
+Pin 19	=	!WR;
+/** outputs	**/
+Pin 13	=	!RAM0;
+Pin 14	=	!RAM1;
+Pin 15	=	!ROM0;
+Pin 16	=	!IOE;
+Pin 17	=	!IWE;
+Pin 18	=	!ROM1;
+
+/* logic equations	*/
+ALTSEL = !MEMDSBL & ME & HE & !A18;
+ROM0 = ALTSEL & ((!A17 & !A16 & !A15) # (A17 & A16 & !A15)) & !A00;
+ROM1 = ALTSEL & ((!A17 & !A16 & !A15) # (A17 & A16 & !A15)) & BHE;
+RAM0 = ALTSEL & ((!A17 & !A16 & A15) # (!A17 & A16 & !A15)) & !A00;
+RAM1 = ALTSEL & ((!A17 & !A16 & A15) # (!A17 & A16 & !A15)) & BHE;
+IOE = ALTSEL & RD;
+IWE = ALTSEL & WR;
+

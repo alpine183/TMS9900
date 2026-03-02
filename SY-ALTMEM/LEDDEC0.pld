@@ -1,0 +1,46 @@
+Name		LEDDEC0;
+Partno		KF007012;
+Date		2020/02/11;
+Revision	02;
+Designer	Alp;
+Company		Alp Design;
+Assembly	System 18-ALTMEM LED decorder;
+Location	U10;
+Device		G16V8;
+
+/* *************************************************************** */
+/* System 1Q IO decorder Glue logic				   */
+/*  								   */
+/* *************************************************************** */
+/* target device	GAL18V8 any speed rank is OK		   */
+/* *************************************************************** */
+
+/** inputs	**/
+Pin 1	=	A19;
+Pin 2	= 	A20;
+Pin 3	=	A21;
+Pin 4	=	A22;
+Pin 5   =	A23;
+Pin 6   =	!ROMCE;
+Pin 7  =	IA16;
+Pin 8	=	IA14;
+Pin 9	=	IA13;
+Pin 11	=	IA12;
+Pin 15	=	IA11;
+Pin 13	=	IA10;
+Pin 18	=	IA09;
+Pin 16	=	IA08;
+Pin 17	=	IA07;
+Pin 14	=	!IWE;
+
+/** outputs	**/
+Pin 19	=	!PSEL; 
+Pin 12	=	!HZ; 
+
+/* logic equations	*/
+PSEL	= (ROMCE & !IA16 & IA14 & IA13 & IA12 & IA11 & IA10 & IA09 & IA08 & IA07 & IWE);
+HZ	= !A19 & !A20 & !A21 & !A22 & !A23;
+
+PSEL.oe = 'b'1;
+HZ.oe = 'b'1;
+
